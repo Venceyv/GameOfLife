@@ -21,8 +21,9 @@ export default {
       colors: {
         'primary-color': '#0f0f0f',
         'primary-unfilled-color': '#1e293b',
-        'primary-filled-color': '#6366f1',
-        'primary-hover-color': '#a05083',
+        'primary-filled-color': '#ef70b2',
+        'primary-hover-color': '#6466f1',
+        'primary-border-color': '#d3d3d3',
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
