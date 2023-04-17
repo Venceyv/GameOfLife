@@ -1,0 +1,33 @@
+:root {
+  --textGlitchColor: #ffffff;
+  --textGlitchColor2: #979797;
+}
+
+.radio-gradient-bg {
+  background-image: radial-gradient(#1c2128 1px, transparent 1px);
+  background-position: 50% 50%;
+  background-size: 1.1rem 1.1rem;
+  overflow: hidden;
+}
+
+.glitch-animate:hover {
+  animation: 1s glitch infinite alternate;
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 4px 3px var(--textGlitchColor), -4px -3px var(--textGlitchColor2);
+  }
+  25% {
+    text-shadow: -4px -3px var(--textGlitchColor), 4px 3px var(--textGlitchColor2);
+  }
+  50% {
+    text-shadow: 4px -3px var(--textGlitchColor), -4px 3px var(--textGlitchColor2);
+  }
+  75% {
+    text-shadow: -4px -3px var(--textGlitchColor), -4px -3px var(--textGlitchColor2);
+  }
+  100% {
+    text-shadow: -4px 0 var(--textGlitchColor), 4px -3px var(--textGlitchColor2);
+  }
+}
