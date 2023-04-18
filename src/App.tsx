@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Button } from './component/ui/button';
-import './animation.css';
 
 const SUB_MATRIX_CALC = [-1, 0, 1];
 const MATRIX_SIZE = {
@@ -18,6 +17,24 @@ interface GoLButtonType {
 
 function App() {
   const { GoLBoard, setGoLBoard, resetGoLBoard } = useGoLState();
+  const [startTick, setStartTick] = useState(false);
+  const [count, setCount] = useState(0);
+  const [fastForward, setFastForward] = useState(false);
+
+  useEffect(() => {
+    let interval: string | number | NodeJS.Timeout | undefined;
+
+    if (startTick) {
+      interval = setInterval(
+        () => {
+          tick();
+        },
+        fastForward ? 250 : 500
+      );
+    }
+
+    return () => clearInterval(interval);
+  }, [startTick, count, fastForward]);
 
   const tick = () => {
     let board = structuredClone(GoLBoard);
@@ -33,10 +50,25 @@ function App() {
     }
 
     setGoLBoard(board);
+    setCount((prev) => prev + 1);
   };
 
+  function onResetBoard() {
+    resetGoLBoard();
+    setCount(0);
+    setStartTick(false);
+    setFastForward(false);
+  }
+
+  function onNextTick() {
+    if (startTick) {
+      setStartTick(false);
+    }
+    tick();
+  }
+
   return (
-    <div className="radio-gradient-bg flex h-full flex-col gap-8 overflow-auto bg-primary-color">
+    <div className="radio-gradient-bg relative flex h-full flex-col gap-8 overflow-auto bg-primary-color">
       <GoLHeader />
       <main className="h-[calc(100%-92px)] p-0 font-dm-sans sm:px-8">
         <section className="flex h-fit min-w-[481px] border-collapse flex-col flex-wrap items-center justify-center gap-6">
@@ -59,18 +91,26 @@ function App() {
             ))}
           </div>
           <div className="flex flex-row gap-4">
-            <Button variant="default" size="default" onClick={resetGoLBoard}>
+            <Button variant="default" size="default" onClick={onResetBoard}>
               Reset
             </Button>
-            <Button variant="default" size="default" onClick={tick}>
-              Start
+            <Button variant="default" size="default" onClick={() => setStartTick((prev) => !prev)}>
+              {startTick ? 'Pause' : 'Start'}
             </Button>
-            <Button variant="default" size="default">
+            <Button variant="default" size="default" onClick={onNextTick}>
               Next
+            </Button>
+            <Button
+              variant={fastForward ? 'default-toggled' : 'default'}
+              size="default"
+              onClick={() => setFastForward((prev) => !prev)}
+            >
+              {'>>'}
             </Button>
           </div>
         </section>
       </main>
+      <FloatCount count={count} />
     </div>
   );
 }
@@ -120,7 +160,7 @@ function GoLButton(buttonProps: GoLButtonType) {
 
 function GoLHeader() {
   return (
-    <header className="flex justify-center pt-4">
+    <header className="flex justify-center pt-6">
       <h1 className="glitch-animate cursor-default text-center font-rubik-pixel text-6xl text-white">
         Game of Life
       </h1>
@@ -130,6 +170,20 @@ function GoLHeader() {
 
 function GoLRow({ children }: { children: ReactNode }) {
   return <div className="flex flex-shrink flex-grow flex-row justify-center">{children}</div>;
+}
+
+function FloatCount({ count }: { count: number }) {
+  return (
+    <div className="float-animate group pointer-events-auto absolute bottom-2/4 top-2/4 translate-x-2/4 translate-y-2/4 font-rubik-pixel text-4xl text-white">
+      <span className="group relative cursor-default ">
+        {count}
+        <div className="absolute right-[-210px] top-[8px] hidden animate-bounce cursor-default group-hover:inline">
+          {' '}
+          Tick Count
+        </div>
+      </span>
+    </div>
+  );
 }
 
 function liveCellTick(GoLBoard: boolean[][], row: number, col: number) {

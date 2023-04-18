@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --textGlitchColor: #ffffff;
+  --textGlitchColor2: #979797;
+}
+
 #root,
 html,
 body {
@@ -10,4 +15,58 @@ body {
 
 html {
   background-color: #0f0f0f;
+}
+
+.radio-gradient-bg {
+  background-image: radial-gradient(#1c2128 1px, transparent 1px);
+  background-position: 50% 50%;
+  background-size: 1.1rem 1.1rem;
+  overflow: hidden;
+}
+
+.glitch-animate:hover {
+  animation: 1s glitch infinite alternate;
+}
+
+.float-animate {
+  animation: float 20s infinite linear;
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 4px 3px var(--textGlitchColor), -4px -3px var(--textGlitchColor2);
+  }
+  25% {
+    text-shadow: -4px -3px var(--textGlitchColor), 4px 3px var(--textGlitchColor2);
+  }
+  50% {
+    text-shadow: 4px -3px var(--textGlitchColor), -4px 3px var(--textGlitchColor2);
+  }
+  75% {
+    text-shadow: -4px -3px var(--textGlitchColor), -4px -3px var(--textGlitchColor2);
+  }
+  100% {
+    text-shadow: -4px 0 var(--textGlitchColor), 4px -3px var(--textGlitchColor2);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translate(calc(-50vw + 10%), calc(100vh - 50%)) rotate(0deg);
+  }
+  20% {
+    transform: translate(calc(30vw + 10%), calc(20vh - 30%)) rotate(60deg);
+  }
+  40% {
+    transform: translate(calc(70vw - 10%), calc(80vh - 70%)) rotate(-30deg);
+  }
+  60% {
+    transform: translate(calc(50vw + 10%), calc(50vh - 50%)) rotate(120deg);
+  }
+  80% {
+    transform: translate(calc(80vw - 10%), calc(30vh - 20%)) rotate(-60deg);
+  }
+  100% {
+    transform: translate(calc(10vw + 10%), calc(0 - 50%)) rotate(180deg);
+  }
 }
